@@ -1,3 +1,7 @@
+# Import flask
+from flask import Flask
+app = Flask(__name__)
+
 # Install psycopg2 using: pip3 install psycopg2
 import psycopg2
 
@@ -12,8 +16,10 @@ con = psycopg2.connect(
 # cursor
 cur = con.cursor()
 
+# executes our POST with sanitization
 cur.execute("INSERT INTO pets (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", ("Billy", "Greyhound", "Brown", 3))
-# executes our query
+
+# executes our GET
 cur.execute("SELECT pets.id as pet_id, pet_name, breed, color, owners_id, checkin, date, owner_name FROM pets JOIN owners on owners_id = owners.id;")
 
 # return the rows
