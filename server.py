@@ -37,6 +37,17 @@ def add_pets():
     except Exception as e:
         print(e)
         return ()
+
+@app.route('/pets/<id>', methods=['delete'])
+def add_pets():
+    try:
+        # Working on delete
+        cur.execute("DELETE FROM pets WHERE ID=%s")  (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", (request.json['name'], request.json['breed'], request.json['color'], request.json['owner_id']))
+        con.commit()
+        return request.json
+    except Exception as e:
+        print(e)
+        return ()
         
 
 # executes our POST with sanitization
