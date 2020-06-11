@@ -5,8 +5,6 @@ import psycopg2
 con = psycopg2.connect(
             host="localhost",
             database="pet_hotel",
-            user = "postgres",
-            password = "postgres",
             port = 5432)
 
 #cursors are the vessel/command in which you communicate with the database.
@@ -14,8 +12,22 @@ con = psycopg2.connect(
 # cursor
 cur = con.cursor()
 
-cur.execute("select id, name")
+cur.execute("INSERT INTO pets (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", ("Billy", "Greyhound", "Brown", 3))
+# executes our query
+cur.execute("SELECT pets.id as pet_id, pet_name, breed, color, owners_id, checkin, date, owner_name FROM pets JOIN owners on owners_id = owners.id;")
 
+# return the rows
+rows = cur.fetchall()
+
+# Loop through the rows and show it in Terminal
+for r in rows:
+    print(f"pet_name {r[1]} breed {r[2]} color {r[3]} checkin {r[5]} owner_name {r[7]}")
+
+# This commits the changes from the INSERT statement
+con.commit()
+
+# Close the cursor!
+cur.close()
 
 # You need to CLOSE the connection!
 con.close()
