@@ -1,6 +1,6 @@
 # Import flask
 import psycopg2
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 # Install psycopg2 using: pip3 install psycopg2
 
@@ -28,9 +28,19 @@ def get_pets():
         print(e)
         return ()
 
+@app.route('/pets', methods=['POST'])
+def add_pets():
+    try:
+        cur.execute("INSERT INTO pets (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", (request.json['name'], request.json['breed'], request.json['color'], request.json['owner_id']))
+        con.commit()
+        return request.json
+    except Exception as e:
+        print(e)
+        return ()
+        
 
 # executes our POST with sanitization
-# cur.execute("INSERT INTO pets (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", ("Billy", "Greyhound", "Brown", 3))
+# 
 
 if __name__ == '__main__':
     app.run()
