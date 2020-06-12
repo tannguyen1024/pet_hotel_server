@@ -39,12 +39,12 @@ def add_pets():
         return ()
 
 # Working on figuruing out the url for our delete
-@app.route('/pets/<id>', methods=['delete'])
-def add_pets():
+@app.route('/pets/<id>', methods=['DELETE'])
+def delete_pets(id):
     try:
-        cur.execute("DELETE FROM pets WHERE ID=%s")  (pet_name, breed, color, owners_id) VALUES (%s, %s, %s, %s)", (request.json['name'], request.json['breed'], request.json['color'], request.json['owner_id']))
+        cur.execute("DELETE FROM pets WHERE ID={}".format(id))  
         con.commit()
-        return request.json
+        return 'deleted'
     except Exception as e:
         print(e)
         return ()
