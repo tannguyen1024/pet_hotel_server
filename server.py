@@ -23,7 +23,20 @@ app = Flask(__name__)
 @app.route('/pets', methods=['GET'])
 def get_pets():
     try:
-        cur.execute("SELECT pets.id as pet_id, pet_name, breed, color, owners_id, checkin, date, owner_name FROM pets JOIN owners on owners_id = owners.id;")
+        cur.execute("SELECT pets.id as pet_id, pet_name, breed, color, owners_id, checkin, date, owner_name FROM pets JOIN owners on owners_id = owners.id ORDER BY pet_name;")
+        # return the rows
+        rows = cur.fetchall()
+        result = {'status': 'CREATED'}
+        return jsonify(rows)
+    except Exception as e:
+        print(e)
+        return ()
+
+# GET ROUTE FOR OWNERS
+@app.route('/owners', methods=['GET'])
+def get_owners():
+    try:
+        cur.execute("SELECT * FROM owners ORDER BY id;")
         # return the rows
         rows = cur.fetchall()
         result = {'status': 'CREATED'}
