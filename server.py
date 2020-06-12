@@ -1,8 +1,8 @@
-# Import flask
+# Install psycopg2 using: pip3 install psycopg2
+# Install flask using: pip3 install flask
+# Import flask and psycopg2 (for postgres database)
 import psycopg2
 from flask import Flask, jsonify, request
-
-# Install psycopg2 using: pip3 install psycopg2
 
 # Establishes connection with postgres
 con = psycopg2.connect(
@@ -10,16 +10,13 @@ con = psycopg2.connect(
     database="pet_hotel",
     port=5432)
 
-# cursor
+# Activate Cursor:
 cur = con.cursor()
 
+# Initiates the app as Flask name
 app = Flask(__name__)
 
-#If you want to return as object instead of array do this:
-#from psycopg2.extras import RealDictCursor
-#cur = conn.cursor(cursor_factory=RealDictCursor)
-
-# GET ROUTE FOR PETS AND OWNER OF PET
+# Get Route for Pets with Owner Name JOIN Statement
 @app.route('/pets', methods=['GET'])
 def get_pets():
     try:
@@ -32,12 +29,12 @@ def get_pets():
         print(e)
         return ()
 
-# GET ROUTE FOR OWNERS
+# Get Route for Owners
 @app.route('/owners', methods=['GET'])
 def get_owners():
     try:
         cur.execute("SELECT * FROM owners ORDER BY id;")
-        # return the rows
+        # Return the Rows
         rows = cur.fetchall()
         result = {'status': 'CREATED'}
         return jsonify(rows)
@@ -45,6 +42,11 @@ def get_owners():
         print(e)
         return ()
 
+# If you want to return as object instead of array do this:
+# from psycopg2.extras import RealDictCursor
+# cur = conn.cursor(cursor_factory=RealDictCursor)
+
+# Post Route
 @app.route('/pets', methods=['POST'])
 def add_pets():
     try:
@@ -55,7 +57,7 @@ def add_pets():
         print(e)
         return ()
 
-# Working on figuruing out the url for our delete
+# Delete Route
 @app.route('/pets/<id>', methods=['DELETE'])
 def delete_pets(id):
     try:
@@ -66,10 +68,9 @@ def delete_pets(id):
         print(e)
         return ()
 
-
+# Put Route
 @app.route('/pets/update/<int:id>', methods=['PUT'])
 def update_pets(id):
-    
     try: 
         if request.json[5]:
            cur.execute("UPDATE pets SET checkin=FALSE WHERE ID={}".format(id))
@@ -83,12 +84,6 @@ def update_pets(id):
     except Exception as e:
         print(e)
         return 'error'
-
-
-        
-
-# executes our POST with sanitization
-# 
 
 if __name__ == '__main__':
     app.run()
